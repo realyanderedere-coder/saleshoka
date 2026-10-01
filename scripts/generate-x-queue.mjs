@@ -1,9 +1,11 @@
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
+import { renderXReview } from "./render-x-review.mjs";
 
 const ROOT = process.cwd();
 const INPUT = resolve(ROOT, "public/index.html");
 const OUTPUT = resolve(ROOT, "output/x_queue.json");
+const REVIEW_OUTPUT = resolve(ROOT, "output/x_review.html");
 const SITE = "https://saleshoka.saleshoka.workers.dev/";
 
 function option(name, fallback = null) {
@@ -171,4 +173,9 @@ await writeFile(OUTPUT, JSON.stringify({
   generated_at: new Date().toISOString(), source: "public/index.html",
   source_page_date: sourceDate, posting_mode: "manual_only", candidates: queue
 }, null, 2) + "\n", "utf8");
-console.log("Generated " + queue.length + " X candidates at output/x_queue.json");
+await writeFile(REVIEW_OUTPUT, renderXReview({
+  generated_at: new Date().toISOString(),
+  source_page_date: sourceDate,
+  candidates: queue
+}), "utf8");
+console.log("Generated " + queue.length + " X candidates and output/x_review.html");
