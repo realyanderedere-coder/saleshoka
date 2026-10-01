@@ -146,7 +146,7 @@ for (const book of books.filter((item) => item.end_date_verified && item.end_dat
     ? "終了 " + book.end_date_text + " " + book.end_time_text + "（掲載情報で確認）"
     : "終了日 " + book.end_date_text + "（終了時刻は未確認）";
   queue.push(candidate("ending", date, [book],
-    "⏰ 今日までのKindleセール\n\n『" + book.title + "』\n" + (book.price_text || "") + "\n" + expiry
+    "⏰ 今日までのKindleセール\n\n『" + book.title + "』\n" + (book.price_verified ? book.price_text : "価格は未確認のため記載しません。") + "\n" + expiry
       + "\n\n👇セール書架\n" + campaignUrl(date, "ending")
       + "\n\n#Kindleセール",
     withPublication({ price_verified: book.price_verified, link_verified: book.product_link_verified }),
