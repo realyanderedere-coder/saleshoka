@@ -89,6 +89,7 @@ function candidate(type, date, products, body, checks, extra = {}) {
   if (!checks.link_verified) blockers.push("作品とAmazon個別商品リンクの対応を確認できません");
   if (!checks.article_url_verified) blockers.push("セール書架URLを確認できません");
   if (!checks.site_published) blockers.push("Cloudflareへの公開完了を確認してから --published を指定してください");
+  if (type === "campaign") blockers.push("キャンペーン条件と紹介作品の編集確認が未入力");
   return {
     type, body, site_url: campaignUrl(date, type),
     utm: { source: "x", medium: "social", campaign: type + "_" + date.replace(/-/g, "") },
