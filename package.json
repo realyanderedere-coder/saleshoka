@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "x:queue": "node scripts/generate-x-queue.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.0.0"
