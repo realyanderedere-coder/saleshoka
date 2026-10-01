@@ -131,7 +131,7 @@ if (pricedBooks.length) {
 }
 for (const book of books) {
   queue.push(candidate("single", date, [book],
-    "📚 " + book.title + "。\n\n" + (book.price_text || "価格は販売ページでご確認ください")
+    "📚 " + book.title + "。\n\n" + (book.price_verified ? book.price_text : "価格は未確認のため記載しません。")
       + (book.reason ? "\n\n" + book.reason : "")
       + "\n\n👇セール書架で詳細を確認\n" + campaignUrl(date, "single")
       + "\n\n#Kindleセール",
