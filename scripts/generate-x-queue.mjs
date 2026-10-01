@@ -132,7 +132,7 @@ for (const book of books) {
   queue.push(candidate("single", date, [book],
     "📚 " + book.title + "。\n\n" + (book.price_text || "価格は販売ページでご確認ください")
       + (book.reason ? "\n\n" + book.reason : "")
-      + "\n\n👇セール書架で詳細を確認\n" + campaignUrl(date, "single_" + (book.product_id || "item"))
+      + "\n\n👇セール書架で詳細を確認\n" + campaignUrl(date, "single")
       + "\n\n#Kindleセール",
     withPublication({ price_verified: book.price_verified, link_verified: book.product_link_verified }),
     { source_page_date: sourceDate, source_date_current: sourceIsCurrent }));
@@ -146,7 +146,7 @@ for (const book of books.filter((item) => item.end_date_verified && item.end_dat
     : "終了日 " + book.end_date_text + "（終了時刻は未確認）";
   queue.push(candidate("ending", date, [book],
     "⏰ 今日までのKindleセール\n\n『" + book.title + "』\n" + (book.price_text || "") + "\n" + expiry
-      + "\n\n👇セール書架\n" + campaignUrl(date, "ending_" + (book.product_id || "item"))
+      + "\n\n👇セール書架\n" + campaignUrl(date, "ending")
       + "\n\n#Kindleセール",
     withPublication({ price_verified: book.price_verified, link_verified: book.product_link_verified }),
     { source_page_date: sourceDate, source_date_current: sourceIsCurrent }));
@@ -155,7 +155,7 @@ campaigns.forEach((item, index) => {
   const key = "campaign_" + String(index + 1).padStart(2, "0");
   queue.push(candidate("campaign", date, [],
     "📚 " + item.title + "。\n\nセール書架で、掲載中の注目作品を紹介しています。"
-      + "\n\n👇作品を確認\n" + campaignUrl(date, key) + "\n\n#Kindleセール",
+      + "\n\n👇作品を確認\n" + campaignUrl(date, "campaign") + "\n\n#Kindleセール",
     withPublication({ price_verified: null, link_verified: true }),
     { campaign_title: item.title, source_page_date: sourceDate, source_date_current: sourceIsCurrent }));
 });
