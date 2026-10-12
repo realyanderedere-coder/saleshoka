@@ -17,6 +17,21 @@ test('missing fields, invalid numeric values and unavailable schema fail closed'
   assert.throws(() => verifySchema([]), /unavailable/);
   assert.deepEqual(validateRows([]), []);
 });
+test('schema discovery distinguishes settings from data and follows wrapped types', () => {
+  const field = (name, type) => ({ name, type: { name: type } });
+  const types = [
+    { name: 'Settings', fields: [field('rumPageloadEventsAdaptiveGroups', 'Limits')] },
+    { name: 'Account', fields: [{ name: 'rumPageloadEventsAdaptiveGroups', type: { ofType: { ofType: { name: 'Rows' } } }, args: [{ name: 'filter', type: { name: 'Filter' } }] }] },
+    { name: 'Rows', fields: [field('count', 'Int'), field('sum', 'Sum'), field('avg', 'Avg'), field('dimensions', 'Dimensions')] },
+    { name: 'Sum', fields: [field('visits', 'Int')] },
+    { name: 'Avg', fields: [field('sampleInterval', 'Float')] },
+    { name: 'Dimensions', fields: [field('requestPath', 'String'), field('refererHost', 'String')] },
+    { name: 'Filter', inputFields: ['datetime_geq', 'datetime_lt', 'requestHost'].map(name => ({ name })) },
+  ];
+  assert.deepEqual(verifySchema(types), { filterType: 'Filter' });
+  types[5].fields[1].isDeprecated = true;
+  assert.throws(() => verifySchema(types), /dimensions unavailable/);
+});
 test('report keeps API estimates unscaled and escapes untrusted dimension labels', () => {
   const row = { count: 10, sum: { visits: 3 }, avg: { sampleInterval: 10 }, dimensions: { requestPath: '/a|<script>\n', refererHost: 'example.com' } };
   const text = render({ total: [row], pages: [row], referrers: [row] }, windowFor(new Date('2026-10-13T00:00:00Z')));

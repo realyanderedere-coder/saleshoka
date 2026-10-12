@@ -27,7 +27,7 @@ export async function graphql(query, variables, token, fetcher = fetch) {
 const typeName = t => t ? t.name || typeName(t.ofType) : undefined;
 export function verifySchema(types) {
   const index = new Map(types.map(t => [t.name, t]));
-  const account = types.find(t => t.fields?.some(f => f.name === NODE));
+  const account = types.find(t => t.fields?.some(f => f.name === NODE && f.args?.some(a => a.name === 'filter')));
   const dataset = account?.fields.find(f => f.name === NODE);
   const fields = index.get(typeName(dataset?.type))?.fields || [];
   const has = (list, name) => list.some(f => f.name === name && !f.isDeprecated);
