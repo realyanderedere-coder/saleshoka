@@ -38,7 +38,7 @@ Visitsは人数やCookieセッションではなく外部または直接リン�
 
 `node --test scripts/weekly-analytics.test.mjs`
 
-日付境界・年跨ぎ、HTTP/GraphQL失敗と秘密情報抑止、欠落/非数値指標、空データ、サンプリング値の非再乗算、Markdownのラベル処理を確認。
+スキーマ探索、日付境界・年跨ぎ、HTTP/GraphQL失敗と秘密情報抑止、欠落/非数値指標、空データ、サンプリング値の非再乗算、Markdownのラベル処理を確認。
 分析トークン設定後の実API・ダッシュボード照合は別途必要。
 
 ## 公式確認元
@@ -49,3 +49,4 @@ Visitsは人数やCookieセッションではなく外部または直接リン�
 - https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/api-token-auth/
 - https://developers.cloudflare.com/analytics/graphql-api/features/discovery/introspection/
 - https://developers.cloudflare.com/analytics/graphql-api/features/discovery/settings/
+
