@@ -1,0 +1,44 @@
+name: Weekly Web Analytics
+
+on:
+  schedule:
+    - cron: '17 1 * * 1' # Monday 10:17 JST; GitHub may delay scheduled runs.
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/weekly-analytics.yml'
+      - 'scripts/weekly-analytics*'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test scripts/weekly-analytics.test.mjs
+  report:
+    if: github.event_name != 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Collect read-only analytics or report missing configuration
+        run: node scripts/weekly-analytics.mjs
+        env:
+          CLOUDFLARE_ANALYTICS_API_TOKEN: ${{ secrets.CLOUDFLARE_ANALYTICS_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: weekly-web-analytics
+          path: reports/*.md
+          retention-days: 90
+          if-no-files-found: error
